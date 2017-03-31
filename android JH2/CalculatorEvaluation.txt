@@ -1,0 +1,69 @@
+package com.example.cis.jh2_jdpollack;
+
+/**
+ * Created by cis on 9/16/2015.
+ */
+import android.util.Log;
+
+public class CalculatorEvaluation {
+    int currentValue=0;
+    String lastOperator="";
+    String firstOperandString ="0";
+
+    // Called when any of the +, -, *, / buttons pressed
+    public void update(String operator, String currentDisplay)
+    {
+        Log.d("Mine", "update: "+operator +" "+ currentDisplay);
+        lastOperator = operator;
+        firstOperandString = currentDisplay;
+    }
+
+    // Called when the "=" button pressed ... answer is returned
+    public String equalsCalculation(String currentDisplay)
+    {
+        int firstOperand =0, secondOperand =0;
+        Log.d("Mine", "equalsCalculation: "+currentDisplay);
+        try
+        {
+            firstOperand = Integer.parseInt(firstOperandString);
+            secondOperand = Integer.parseInt(currentDisplay);
+        }
+        catch (NumberFormatException e)
+        {
+            Log.d("Mine", "Bad operands:"+firstOperandString +","+ currentDisplay);
+            return "";
+        }
+        if ("+".equals(lastOperator))
+        {
+            return ""+(firstOperand + secondOperand);
+        }
+        else if ("-".equals(lastOperator))
+        {
+            return ""+(firstOperand - secondOperand);
+        }
+        else if ("*".equals(lastOperator))
+        {
+            return ""+(firstOperand * secondOperand);
+        }
+        else if ("/".equals(lastOperator))
+        {
+            if (secondOperand != 0)
+                return ""+(firstOperand / secondOperand);
+            else
+                Log.d("Mine", "Divide by zero error");
+        }
+        else
+        {
+            Log.d("Mine", "Bad Operator: "+ lastOperator);
+        }
+        return "";
+    }
+
+    // Called when the clear button pressed
+    public void clear()
+    {
+        currentValue = 0;
+        lastOperator="";
+    }
+
+}

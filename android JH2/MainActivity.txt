@@ -1,0 +1,72 @@
+package com.example.cis.jh2_jdpollack;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.TextView;
+
+
+public class MainActivity extends Activity implements OnClickListener {
+    /**
+     * Called when the activity is first created.
+     */
+    TextView display = null;
+    CalculatorEvaluation ce = new CalculatorEvaluation();
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        int[] button_resources = {R.id.b1, R.id.b2, R.id.b3, R.id.b4, R.id.b5, R.id.b6,
+                R.id.b7, R.id.b8, R.id.b9, R.id.b0, R.id.backSpace, R.id.clear,
+                R.id.div, R.id.equals, R.id.minus, R.id.mult, R.id.plus};
+
+        for (int i = 0; i < button_resources.length; i++) {
+            Button b = (Button) findViewById(button_resources[i]);
+            b.setOnClickListener(this);
+        }
+        display = (TextView) findViewById(R.id.display);
+
+    }
+    public void onClick(View v) {
+        Button b = (Button)v;
+        String label = b.getText().toString();
+        String currValue = display.getText().toString();
+
+        switch (v.getId()) {
+            case R.id.clear:
+                display.setText("");
+                break;
+            case R.id.plus:
+            case R.id.minus:
+            case R.id.mult:
+            case R.id.div:
+                ce.update(label, currValue);
+                display.setText("");
+                break;
+            case R.id.equals:
+                String result = ce.equalsCalculation(currValue);
+                display.setText(result);
+                break;
+            case R.id.backSpace:
+                if (currValue.length() >1 ) {
+                    currValue = currValue.substring(0, currValue.length() - 1);
+                    display.setText(currValue);
+                }
+                else if (currValue.length() <=1 ) {
+                    display.setText("");
+                }
+                break;
+
+            default:
+                // If the button isn't one of the above, it must be a digit
+                String digit = label;// This is the digit pressed
+                display.append(digit);
+                break;
+        }
+    }
+
+}
